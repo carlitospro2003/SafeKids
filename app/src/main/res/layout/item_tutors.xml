@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginRight="30dp"
+    android:layout_marginLeft="30dp"
+    android:layout_marginBottom="16dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="4dp"
+    android:backgroundTint="@color/strongBlueSafeKids">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="12dp">
+
+        <TextView
+            android:id="@+id/tvNameTutor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Jose Eduardo"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:fontFamily="@font/montserrat_bold"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Sección con imagen y datos -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="12dp">
+
+            <!-- Imagen del niño -->
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/imgTutor"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:src="@drawable/iconosafekids"
+                android:layout_marginEnd="16dp" />
+
+            <!-- Datos en dos columnas -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <!-- Fila 1: Fecha de nacimiento -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="4dp">
+
+                    <TextView
+                        android:id="@+id/tvPhone"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Telefono:"
+                        android:textColor="@color/white"
+                        android:layout_marginLeft="20dp"
+                        android:textSize="12sp"
+                        android:fontFamily="@font/montserrat_bold" />
+
+                    <TextView
+                        android:id="@+id/tvPhoneTutor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="8714657477"
+                        android:layout_marginRight="30dp"
+                        android:textColor="@color/white"
+                        android:textSize="12sp"
+                        android:fontFamily="@font/montserrat_bold" />
+                </LinearLayout>
+
+                <!-- Fila 2: Escuela -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tvEmail"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Correo:"
+                        android:layout_marginLeft="20dp"
+                        android:textColor="@color/white"
+                        android:textSize="12sp"
+                        android:fontFamily="@font/montserrat_bold" />
+
+                    <TextView
+                        android:id="@+id/tvEmailTutor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Primaria\nHeroes"
+                        android:textColor="@color/white"
+                        android:layout_marginRight="30dp"
+                        android:textSize="12sp"
+                        android:fontFamily="@font/montserrat_bold" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

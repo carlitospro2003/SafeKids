@@ -1,0 +1,70 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.SafeKids" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    </style>
+
+    <style name="Theme.SafeKids" parent="Base.Theme.SafeKids" />
+
+    <!-- ESTILO LETRAS DE HEADERS -->
+    <style name="headerText">
+        <item name="android:textColor">@color/shortBlueSafeKids</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:fontFamily">@font/inter_bold</item>
+    </style>
+
+
+    <!-- ESTILO LETRAS DE ALERTA -->
+    <style name="successMessageText">
+        <item name="android:textColor">@color/strongBlueSafeKids</item> <!-- Azul fuerte -->
+        <item name="android:textSize">18dp</item>
+        <item name="android:fontFamily">@font/montserrat_bold</item>
+    </style>
+
+
+    <!-- ESTILO DE BOTON AZUL FUERTE -->
+    <style name="buttomBlueStrong">
+        <item name="android:layout_width">250dp</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:backgroundTint">@color/strongBlueSafeKids</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:fontFamily">@font/inter_bold</item>
+        <item name="cornerRadius">5dp</item>
+    </style>
+
+
+    <!-- ESTILO DE BOTON AZUL CLARO -->
+    <style name="buttomBlueLight">
+        <item name="android:layout_width">250dp</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:backgroundTint">@color/intermediateBlueSafeKids</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:fontFamily">@font/inter_bold</item>
+        <item name="cornerRadius">5dp</item>
+    </style>
+
+    <!-- ESTILO DE BOTONES DE NOTIFICACIONES -->
+    <style name="buttomNotifications">
+        <item name="android:layout_width">250dp</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:backgroundTint">@color/strongBlueSafeKids</item>
+        <item name="android:textColor">@color/shortBlueSafeKids</item>
+        <item name="android:fontFamily">@font/inter_bold</item>
+        <item name="cornerRadius">5dp</item>
+    </style>
+
+
+
+    <!-- ESTILO DE MENU DE NAVEGACION -->
+
+    <style name="BottomNavigation">
+        <item name="android:background">@color/strongBlueSafeKids</item>
+        <item name="itemIconTint">@color/shortBlueSafeKids</item>
+        <item name="itemTextColor">@color/shortBlueSafeKids</item>
+    </style>
+
+    <style name="BottomNavText" parent="TextAppearance.AppCompat.Caption">
+        <item name="android:textSize">10sp</item>
+    </style>
+</resources>

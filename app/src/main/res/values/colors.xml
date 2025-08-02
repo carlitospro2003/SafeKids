@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="strongBlueSafeKids">#0857a1</color>
+    <color name="lightBlueSafeKids">#83cfd5</color>
+    <color name="greySafeKids">#c8c5c3</color>
+    <color name="intermediateBlueSafeKids">#0097b2</color>
+    <color name="shortBlueSafeKids">#b8ecea</color>
+    <color name="lightRedSafeKids">#e09191</color>
+</resources>

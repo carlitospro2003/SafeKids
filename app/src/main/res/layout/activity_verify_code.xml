@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".VerifyCodeActivity"
+    android:background="@color/white">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/imageVerifyCodeSafeKids"
+                android:layout_width="160dp"
+                android:layout_height="135dp"
+                android:layout_marginTop="76dp"
+                android:layout_marginBottom="46dp"
+                app:srcCompat="@drawable/iconosafekids" />
+
+            <TextView
+                android:id="@+id/tvVerifyTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Verificacion de dos pasos"
+                android:layout_marginBottom="22dp"
+                android:fontFamily="@font/inter_bold"
+                android:textColor="@color/strongBlueSafeKids"
+                android:textSize="24sp"/>
+
+            <TextView
+                android:id="@+id/tvViewVerifyDescri"
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                android:text="Ingresa los 6 digitos de seguridad enviados a tu correo"
+                android:textAlignment="center"
+                android:textColor="@color/greySafeKids"
+                android:layout_marginBottom="42dp"
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/tvViewVerifyError"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="42dp"
+                android:text="Codigo no valido"
+                android:background="@color/lightRedSafeKids"
+                android:textColor="@color/white"
+                android:visibility="gone"/>
+
+            <com.chaos.view.PinView
+                android:id="@+id/pinViewVerifyCode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/PinWidget.PinView"
+                android:cursorVisible="true"
+                android:layout_marginBottom="32dp"
+                android:inputType="number"
+                android:padding="20dp"
+                android:text=""
+                android:textColor="@color/greySafeKids"
+                android:textSize="34sp"
+                android:textStyle="bold"
+                app:cursorColor="@color/strongBlueSafeKids"
+                app:cursorWidth="2dp"
+                app:hideLineWhenFilled="false"
+                app:itemCount="6"
+                app:itemHeight="58dp"
+                app:itemRadius="13dp"
+                app:itemSpacing="10dp"
+                app:itemWidth="48dp"
+                app:lineColor="@color/intermediateBlueSafeKids"
+                app:lineWidth="6dp"
+                app:viewType="rectangle"/>
+
+            <Button
+                android:id="@+id/buttonResendCodeVerifyCode"
+                style="@style/buttomBlueLight"
+                android:layout_marginBottom="20dp"
+                android:text="Solicitar Nuevo Codigo" />
+
+            <Button
+                android:id="@+id/buttonVerifyCode"
+                style="@style/buttomBlueLight"
+                android:text="Ingresar" />
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

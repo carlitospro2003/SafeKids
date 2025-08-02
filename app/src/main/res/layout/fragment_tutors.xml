@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:paddingBottom="80dp"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:context=".fragments.TutorsFragment">
+
+        <!-- Header azul -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="104dp"
+            android:orientation="vertical"
+            android:background="@color/strongBlueSafeKids"
+            android:padding="16dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/imgIconTutor"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:src="@drawable/parents"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+
+                <TextView
+                    android:id="@+id/textViewTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="70dp"
+                    android:text="Responsables"
+                    android:textColor="@color/shortBlueSafeKids"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/imgIconTutor"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tutor"
+                android:layout_marginLeft="30dp"
+                android:textSize="20sp"
+                android:textColor="@color/strongBlueSafeKids"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <!-- Recycler de Tutor -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewTutor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:nestedScrollingEnabled="false" />
+
+        <!-- Título Familiares -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Familiares"
+                android:layout_marginLeft="30dp"
+                android:textSize="20sp"
+                android:textColor="@color/strongBlueSafeKids"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/addNewFamily"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:layout_marginStart="170dp"
+                android:layout_marginRight="60dp"
+                android:src="@drawable/add"
+                android:contentDescription="Agregar familiar" />
+
+        </LinearLayout>
+
+        <!-- Recycler de Familiares -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewFamily"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:nestedScrollingEnabled="false" />
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

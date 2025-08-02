@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddFamilyActivity"
+    android:orientation="vertical"
+    android:background="@color/white">
+
+    <RelativeLayout
+        android:id="@+id/headerLayoutAddFamily"
+        android:layout_width="match_parent"
+        android:layout_height="104dp"
+        android:background="@color/strongBlueSafeKids"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:fontFamily="@font/inter_bold"
+            android:text="Agregar Responsable"
+            android:textColor="@color/shortBlueSafeKids"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+    <!-- CONTENIDO SCROLLEABLE -->
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/headerLayoutAddFamily"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:padding="16dp">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/photoNewFamily"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginBottom="30dp"
+                android:layout_gravity="center"
+                android:src="@drawable/iconosafekids"/>
+
+            <TextView
+                android:layout_width="298dp"
+                android:layout_height="40dp"
+                android:layout_marginBottom="30dp"
+                android:fontFamily="@font/inter_bold"
+                android:gravity="center"
+                android:text="Agrega una Fotografia"
+                android:textColor="@color/strongBlueSafeKids"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/tvErrorPhotoFamily"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/lightRedSafeKids"
+                android:text="Favor de subir una foto"
+                android:visibility="gone"
+                android:textSize="12sp"
+                android:layout_marginBottom="8dp"/>
+
+
+
+            <!-- Aquí todos tus campos -->
+            <TextView
+                android:id="@+id/textViewNameFamily"
+                android:layout_width="298dp"
+                android:layout_height="20dp"
+                android:fontFamily="@font/montserrat"
+                android:text="Nombres"
+                android:textColor="@color/black"
+                android:layout_marginBottom="10dp"
+                android:textAllCaps="true"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/edtNameFamily"
+                android:layout_width="298dp"
+                android:layout_height="50dp"
+                android:layout_marginBottom="20dp"
+                android:hint="Nombres"
+                android:textColor="@color/black"
+                android:backgroundTint="@color/black"/>
+
+            <TextView
+                android:id="@+id/tvErrorNameFamily"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/lightRedSafeKids"
+                android:text="Campo Requerido"
+                android:visibility="gone"
+                android:textSize="12sp"
+                android:layout_marginBottom="8dp"/>
+
+            <TextView
+                android:id="@+id/textViewLastNameFamily"
+                android:layout_width="298dp"
+                android:layout_height="20dp"
+                android:fontFamily="@font/montserrat"
+                android:text="Apellidos"
+                android:textColor="@color/black"
+                android:layout_marginBottom="10dp"
+                android:textAllCaps="true"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/edtLastNameFamily"
+                android:layout_width="298dp"
+                android:layout_height="50dp"
+                android:layout_marginBottom="20dp"
+                android:hint="Apellidos"
+                android:textColor="@color/black"
+                android:backgroundTint="@color/black"/>
+
+            <TextView
+                android:id="@+id/tvErrorLastNameFamily"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/lightRedSafeKids"
+                android:text="Campo Requerido"
+                android:visibility="gone"
+                android:textSize="12sp"
+                android:layout_marginBottom="8dp"/>
+
+            <TextView
+                android:id="@+id/textViewPhoneFamily"
+                android:layout_width="298dp"
+                android:layout_height="20dp"
+                android:fontFamily="@font/montserrat"
+                android:text="Telefono"
+                android:textColor="@color/black"
+                android:layout_marginBottom="10dp"
+                android:textAllCaps="true"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/edtPhoneFamily"
+                android:layout_width="298dp"
+                android:layout_height="50dp"
+                android:layout_marginBottom="20dp"
+                android:hint="Telefono"
+                android:textColor="@color/black"
+                android:backgroundTint="@color/black"/>
+
+            <TextView
+                android:id="@+id/tvErrorPhoneFamily"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/lightRedSafeKids"
+                android:text="Campo Requerido"
+                android:visibility="gone"
+                android:textSize="12sp"
+                android:layout_marginBottom="8dp"/>
+
+            <TextView
+                android:id="@+id/textViewRelationFamily"
+                android:layout_width="298dp"
+                android:layout_height="20dp"
+                android:fontFamily="@font/montserrat"
+                android:text="Parentezco"
+                android:textColor="@color/black"
+                android:layout_marginBottom="10dp"
+                android:textAllCaps="true"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/edtRelationFamily"
+                android:layout_width="298dp"
+                android:layout_height="50dp"
+                android:layout_marginBottom="20dp"
+                android:hint="Parentezco"
+                android:textColor="@color/black"
+                android:backgroundTint="@color/black"/>
+
+            <TextView
+                android:id="@+id/tvErrorRelationshipFamily"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/lightRedSafeKids"
+                android:text="Campo Requerido"
+                android:visibility="gone"
+                android:textSize="12sp"
+                android:layout_marginBottom="8dp"/>
+
+            <Button
+                android:id="@+id/buttomAddNewFamily"
+                style="@style/buttomBlueStrong"
+                android:text="Agregar"/>
+
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

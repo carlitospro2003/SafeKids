@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="30dp"
+    android:layout_marginBottom="16dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="4dp"
+    android:backgroundTint="@color/strongBlueSafeKids">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="12dp">
+
+        <!-- Nombre del niño -->
+        <TextView
+            android:id="@+id/tvNameChildren"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="David Herrera"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:fontFamily="@font/montserrat_bold"
+            android:layout_marginBottom="8dp"
+            android:maxLines="2"
+            android:ellipsize="end" />
+
+        <!-- Sección con imagen y datos -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="12dp">
+
+            <!-- Imagen del niño -->
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/imgChildren"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:src="@drawable/iconosafekids"
+                android:layout_marginEnd="16dp" />
+
+            <!-- Datos en dos columnas -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <!-- Fila 1: Fecha de nacimiento -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="4dp">
+
+                    <TextView
+                        android:id="@+id/tvDate"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Fecha de Nacimiento:"
+                        android:textColor="@color/white"
+                        android:layout_marginStart="20dp"
+                        android:textSize="12sp"
+                        android:fontFamily="@font/montserrat_bold"
+                        android:maxLines="2"
+                        android:ellipsize="end" />
+
+                    <TextView
+                        android:id="@+id/tvDatOfBirth"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="13/11/2003"
+                        android:textColor="@color/white"
+                        android:textSize="12sp"
+                        android:fontFamily="@font/montserrat_bold"
+                        android:maxLines="1"
+                        android:ellipsize="end" />
+                </LinearLayout>
+
+                <!-- Fila 2: Escuela -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tvSchool"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Escuela:"
+                        android:layout_marginStart="20dp"
+                        android:textColor="@color/white"
+                        android:textSize="12sp"
+                        android:fontFamily="@font/montserrat_bold"
+                        android:maxLines="2"
+                        android:ellipsize="end" />
+
+                    <TextView
+                        android:id="@+id/tvSchoolChildren"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Primaria Heroes de la Independencia del Norte de México"
+                        android:textColor="@color/white"
+                        android:textSize="12sp"
+                        android:fontFamily="@font/montserrat_bold"
+                        android:maxLines="3"
+                        android:ellipsize="end" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Botón "Ver" -->
+        <Button
+            android:id="@+id/btnShowChildren"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="200dp"
+            android:minHeight="48dp"
+            android:backgroundTint="@color/white"
+            android:text="Ver"
+            android:layout_gravity="center"
+            android:textColor="@color/strongBlueSafeKids"
+            app:cornerRadius="5dp"
+            android:paddingHorizontal="24dp"
+            android:paddingVertical="4dp"
+            android:textAllCaps="false" />
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

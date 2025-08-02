@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navChildren"
+        android:title="Niños"
+        android:icon="@drawable/children"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <item
+        android:id="@+id/navTutors"
+        android:title="Tutores"
+        android:icon="@drawable/parents"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <item
+        android:id="@+id/navNotifications"
+        android:title="Notificaciones"
+        android:icon="@drawable/notifications"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <item
+        android:id="@+id/navProfile"
+        android:title="Perfil"
+        android:icon="@drawable/profile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+</menu>

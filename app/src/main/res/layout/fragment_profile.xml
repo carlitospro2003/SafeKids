@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="150dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".fregments.ProfileFragment"
+    android:orientation="vertical"
+    android:background="@color/white">
+
+    <!-- HEADER -->
+    <RelativeLayout
+        android:id="@+id/headerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="104dp"
+        android:background="@color/strongBlueSafeKids"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:fontFamily="@font/inter_bold"
+            android:text="Mi Perfil"
+            android:textColor="@color/shortBlueSafeKids"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <!-- CONTENIDO SCROLLEABLE -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintTop_toBottomOf="@id/headerLayout"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:padding="16dp">
+
+            <!-- FOTO -->
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/imgProfile"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginBottom="30dp"
+                android:src="@drawable/iconosafekids"
+                android:layout_gravity="center" />
+
+            <!-- CONTENIDO -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp">
+
+                <!-- Nombres -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Nombres"
+                    android:textColor="@color/black"
+                    android:textAllCaps="true"
+                    android:textSize="16sp"
+                    android:layout_marginBottom="10dp"/>
+
+                <TextView
+                    android:id="@+id/nameGuardian"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Carlos Eduardo"
+                    android:textSize="14sp"
+                    android:textColor="@color/greySafeKids" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@color/greySafeKids" />
+
+                <!-- Apellidos -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Apellidos"
+                    android:textColor="@color/black"
+                    android:textAllCaps="true"
+                    android:textSize="16sp"
+                    android:layout_marginBottom="10dp"/>
+
+                <TextView
+                    android:id="@+id/lastnameGuardian"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Ramirez Saucedo"
+                    android:textSize="14sp"
+                    android:textColor="@color/greySafeKids"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@color/greySafeKids" />
+
+                <!-- Correo -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Correo Electrónico"
+                    android:textColor="@color/black"
+                    android:textAllCaps="true"
+                    android:textSize="16sp"
+                    android:layout_marginBottom="10dp"/>
+
+                <TextView
+                    android:id="@+id/emailGuardian"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="carloseduardorsaucedo@gmail.com"
+                    android:textSize="14sp"
+                    android:textColor="@color/greySafeKids"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@color/greySafeKids" />
+
+                <!-- Contraseña -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Contraseña"
+                    android:textColor="@color/black"
+                    android:textAllCaps="true"
+                    android:textSize="16sp"
+                    android:layout_marginBottom="10dp"/>
+
+                <TextView
+                    android:id="@+id/passwordGuardian"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="**********************"
+                    android:textSize="14sp"
+                    android:textColor="@color/greySafeKids"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@color/greySafeKids" />
+
+                <!-- Teléfono -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Teléfono"
+                    android:textColor="@color/black"
+                    android:textAllCaps="true"
+                    android:textSize="16sp"
+                    android:layout_marginBottom="10dp"/>
+
+                <TextView
+                    android:id="@+id/phoneGuardian"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="8714657477"
+                    android:textSize="14sp"
+                    android:textColor="@color/greySafeKids"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="20dp"
+                    android:background="@color/greySafeKids" />
+
+                <!-- Botón Editar -->
+                <Button
+                    android:id="@+id/buttomEditProfile"
+                    style="@style/buttomBlueStrong"
+                    android:text="Editar"
+                    android:layout_gravity="center"/>
+
+                <!-- Botón Cerrar sesión -->
+                <Button
+                    android:id="@+id/buttomLogoutProfile"
+                    style="@style/buttomBlueStrong"
+                    android:layout_marginTop="15dp"
+                    android:text="Cerrar sesión"
+                    android:layout_gravity="center"/>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
