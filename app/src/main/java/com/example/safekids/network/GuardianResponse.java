@@ -10,6 +10,7 @@ public class GuardianResponse {
     private Guardian data;
     private String temporaryToken; // solo viene en login
     private String token; // solo viene en 2FA
+    private List<Children> students;
     private String timestamp;
 
     public boolean isSuccess() { return success; }
@@ -17,6 +18,8 @@ public class GuardianResponse {
     public Guardian getData() { return data; }
     public String getTemporaryToken() { return temporaryToken; }
     public String getToken() { return token; }
+
+    public List<Children> getStudents() { return students; }
     public String getTimestamp() { return timestamp; }
 
     public static class Guardian {
@@ -28,7 +31,6 @@ public class GuardianResponse {
         private String photo;
         private Boolean status;
 
-        private List<Children> students;
 
 
         public int getId() { return id; }
@@ -39,7 +41,6 @@ public class GuardianResponse {
         public String getPhoto() { return photo; }
         public Boolean getStatus() { return status; }
 
-        public List<Children> getStudents() { return students; }
 
     }
 

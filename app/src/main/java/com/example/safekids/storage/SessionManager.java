@@ -75,6 +75,22 @@ public class SessionManager {
         };
     }
 
+    public void saveStudents(List<Children> students) {
+        Gson gson = new Gson();
+        String json = gson.toJson(students);
+        editor.putString(KEY_STUDENTS, json);
+        editor.apply();
+    }
+
+    public List<Children> getStudents() {
+        String json = prefs.getString(KEY_STUDENTS, null);
+        if (json == null) return new ArrayList<>();
+        Gson gson = new Gson();
+        Type type = new TypeToken<List<Children>>() {}.getType();
+        return gson.fromJson(json, type);
+    }
+
+
     public void clearSession() {
         editor.remove(KEY_TOKEN);
         editor.remove(KEY_ID);

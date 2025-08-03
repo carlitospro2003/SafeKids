@@ -90,6 +90,7 @@ public class TwoFAActivity extends AppCompatActivity {
                         //Guardar toke y datos del usuario
                         sessionManager.saveToken(res.getToken());
                         sessionManager.saveGuardian(res.getData());
+                        sessionManager.saveStudents(res.getStudents());
 
 
                         // Ir a MainActivity

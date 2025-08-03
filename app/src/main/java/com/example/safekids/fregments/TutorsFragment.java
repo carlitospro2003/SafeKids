@@ -2,6 +2,7 @@ package com.example.safekids.fregments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -10,19 +11,31 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import android.widget.ImageView;
 
 import com.example.safekids.AddFamilyActivity;
 import com.example.safekids.R;
 import com.example.safekids.adapters.TutorsAdapter;
 import com.example.safekids.adapters.FamilyAdapter;
+import com.example.safekids.models.Children;
+import com.example.safekids.network.AuthorizedResponse;
 
 import com.example.safekids.models.Tutor;
 import com.example.safekids.models.Family;
+import com.example.safekids.network.ApiClient;
+import com.example.safekids.network.ApiService;
+import com.example.safekids.storage.SessionManager;
 
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -31,12 +44,11 @@ import java.util.List;
  */
 public class TutorsFragment extends Fragment {
 
-
-    private RecyclerView recyclerViewTutor, recyclerViewFamily;
-    private TutorsAdapter tutorsAdapter;
+    private RecyclerView recyclerViewFamily;
     private FamilyAdapter familyAdapter;
-    private List<Tutor> tutorList;
-    private List<Family> familyList;
+    private List<Family> familyList = new ArrayList<>();
+    private ApiService apiService;
+    private SessionManager sessionManager;
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -80,8 +92,8 @@ public class TutorsFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
 
 
         // Inflate the layout for this fragment
@@ -95,34 +107,48 @@ public class TutorsFragment extends Fragment {
                 startActivity(intent);
             }
         });
-
-        recyclerViewTutor = view.findViewById(R.id.recyclerViewTutor);
         recyclerViewFamily = view.findViewById(R.id.recyclerViewFamily);
-
-        recyclerViewTutor.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerViewFamily.setLayoutManager(new LinearLayoutManager(getContext()));
 
-
-        // Lista hardcodeada por ahora
-        tutorList = new ArrayList<>();
-        tutorList.add(new Tutor("Victor Alejandro", "8787878787", "vic@gmail.com", R.drawable.iconosafekids));
-
-        tutorsAdapter = new TutorsAdapter(tutorList);
-        recyclerViewTutor.setAdapter(tutorsAdapter);
-
-        // Lista de familiares
-        familyList = new ArrayList<>();
-        familyList.add(new Family("José Eduardo", "8714657477", "Hermano", R.drawable.iconosafekids));
-        familyList.add(new Family("María López", "8711234567", "Tía", R.drawable.iconosafekids));
-        familyList.add(new Family("Carlos Reyes", "8719876543", "Abuelo", R.drawable.iconosafekids));
-
-        tutorsAdapter = new TutorsAdapter(tutorList);
-        familyAdapter = new FamilyAdapter(familyList);
-
-        recyclerViewTutor.setAdapter(tutorsAdapter);
-
+        familyAdapter = new FamilyAdapter(getContext(), familyList);
         recyclerViewFamily.setAdapter(familyAdapter);
 
+        sessionManager = new SessionManager(getContext());
+        apiService = ApiClient.getApiService();
+
+        loadAllAuthorizedPeoples();
+
         return view;
+    }
+
+    private void loadAllAuthorizedPeoples() {
+
+        String token = "Bearer " + sessionManager.getToken();
+        List<Children> students = sessionManager.getStudents();
+
+        // Limpiamos lista
+        familyList.clear();
+
+        for (Children student : students) {
+            int studentId = student.getId();
+            apiService.getAuthorizedPeoples(token, studentId)
+                    .enqueue(new Callback<AuthorizedResponse>() {
+                        @Override
+                        public void onResponse(Call<AuthorizedResponse> call, Response<AuthorizedResponse> response) {
+                            if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
+                                List<Family> authorized = response.body().getData();
+                                familyList.addAll(authorized);
+                                familyAdapter.notifyDataSetChanged();
+                            } else {
+                                Log.e("TutorFragment", "Error: " + response.message());
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<AuthorizedResponse> call, Throwable t) {
+                            Log.e("TutorFragment", "Failure: " + t.getMessage());
+                        }
+                    });
+        }
     }
 }

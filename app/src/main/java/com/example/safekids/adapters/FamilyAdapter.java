@@ -1,5 +1,6 @@
 package com.example.safekids.adapters;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,56 +21,56 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class FamilyAdapter extends RecyclerView.Adapter<FamilyAdapter.FamilyViewHolder> {
 
     private List<Family> familyList;
+    private Context context;
 
-    public FamilyAdapter(List<Family> familyList) {
+    public FamilyAdapter(Context context, List<Family> familyList)
+    {
+        this.context = context;
         this.familyList = familyList;
     }
 
     @NonNull
     @Override
     public FamilyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_family, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_family, parent, false);
         return new FamilyViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull FamilyViewHolder holder, int position) {
-        Family family = familyList.get(position);
+        Family member = familyList.get(position);
 
-        holder.tvName.setText(family.getName());
-        holder.tvPhone.setText(family.getPhone());
-        holder.tvRelationship.setText(family.getRelationship());
-        holder.img.setImageResource(family.getImageRes());
+        holder.tvFamilyName.setText(member.getFullName());
+        holder.tvRelationship.setText(member.getRelationship());
+        holder.tvPhone.setText(member.getPhone());
 
-        // Puedes añadir aquí listeners para editar y eliminar
-        holder.btnEdit.setOnClickListener(v -> {
-            // Acción para editar
-        });
-
-        holder.btnDelete.setOnClickListener(v -> {
-            // Acción para eliminar
-        });
+        // Por ahora usamos imagen por defecto
+        holder.imgFamily.setImageResource(R.drawable.iconosafekids);
     }
 
     @Override
-    public int getItemCount() {
+    public int getItemCount()
+    {
         return familyList.size();
+    }
+
+    public void updateData(List<Family> newList) {
+        familyList.clear();
+        familyList.addAll(newList);
+        notifyDataSetChanged();
     }
 
     static class FamilyViewHolder extends RecyclerView.ViewHolder {
 
-        TextView tvName, tvPhone, tvRelationship;
-        CircleImageView img;
-        Button btnEdit, btnDelete;
+        CircleImageView imgFamily;
+        TextView tvFamilyName, tvRelationship, tvPhone;
 
-        public FamilyViewHolder(@NonNull View itemView) {
+        FamilyViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvName = itemView.findViewById(R.id.tvNameFamily);
-            tvPhone = itemView.findViewById(R.id.tvPhoneNumberFamily);
+            imgFamily = itemView.findViewById(R.id.imgFamily);
+            tvFamilyName = itemView.findViewById(R.id.tvNameFamily);
             tvRelationship = itemView.findViewById(R.id.tvRelationshipFamily);
-            img = itemView.findViewById(R.id.imgFamily);
-            btnEdit = itemView.findViewById(R.id.btnEditFamily);
-            btnDelete = itemView.findViewById(R.id.btnDeleteFamily);
+            tvPhone = itemView.findViewById(R.id.tvPhoneNumberFamily);
         }
     }
 }

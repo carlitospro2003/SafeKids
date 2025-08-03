@@ -3,9 +3,12 @@ package com.example.safekids.network;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
+
 public interface ApiService {
 
     @Headers("Accept: application/json")
@@ -25,6 +28,22 @@ public interface ApiService {
             @Header("Authorization") String authHeader,
             @Body ChangePasswordRequest request
     );
+
+    @GET("api1/authPeoples/my-authorizeds/{studentId}")
+    Call<AuthorizedResponse> getAuthorizedPeoples(
+            @Header("Authorization") String token,
+            @Path("studentId") int studentId
+    );
+
+    @Headers("Accept: application/json")
+    @POST("api1/authPeoples/{studentId}")
+    Call<GuardianResponse> addAuthorizedFamily(
+            @Header("Authorization") String authHeader,
+            @Path("studentId") int studentId,
+            @Body AddFamilyRequest request
+    );
+
+
 
 
 }

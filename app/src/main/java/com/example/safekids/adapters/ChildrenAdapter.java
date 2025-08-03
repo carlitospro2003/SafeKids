@@ -40,19 +40,25 @@ public class ChildrenAdapter extends RecyclerView.Adapter<ChildrenAdapter.Childr
     @Override
     public void onBindViewHolder(@NonNull ChildrenViewHolder holder, int position) {
         Children child = childrenList.get(position);
-        holder.tvChildrenName.setText(child.getName());
-        holder.imgChildren.setImageResource(child.getImageResId());
+
+        // 🔹 Mostrar nombre completo
+        holder.tvChildrenName.setText(child.getFullName());
         holder.tvDateOfBirth.setText(child.getBirthDate());
-        holder.tvSchool.setText(child.getSchool());
+
+        // 🔹 Foto por defecto
+        holder.imgChildren.setImageResource(R.drawable.iconosafekids);
+
+        // 🔹 School ya no existe, dejamos vacío o un placeholder
+        holder.tvSchool.setText("Escuela no disponible");
 
         holder.btnShow.setOnClickListener(v -> {
             Intent intent = new Intent(context, ChildrenDetailActivity.class);
-            intent.putExtra("name", child.getName());
-            intent.putExtra("imageResId", child.getImageResId());
+            intent.putExtra("name", child.getFullName());
             intent.putExtra("birthDate", child.getBirthDate());
-            intent.putExtra("school", child.getSchool());
+            intent.putExtra("photo", child.getPhoto());
             context.startActivity(intent);
         });
+
 
     }
 

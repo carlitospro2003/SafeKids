@@ -1,34 +1,38 @@
 package com.example.safekids.models;
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 
 
 public class Children implements Serializable {
-    private String name;
-    private int imageResId;
+
+    private int id;
+
+    @SerializedName("firstName")
+    private String firstName;
+
+    @SerializedName("lastName")
+    private String lastName;
+
+    @SerializedName("birthDate")
     private String birthDate;
-    private String school;
 
-    public Children(String name, int imageResId, String birthDate, String school) {
-        this.name = name;
-        this.imageResId = imageResId;
-        this.birthDate = birthDate;
-        this.school = school;
-    }
+    @SerializedName("photo")
+    private String photo;
 
-    public String getName() {
-        return name;
-    }
+    @SerializedName("status")
+    private boolean status;
 
+    @SerializedName("created_at")
+    private String createdAt;
 
-    public int getImageResId() {
-        return imageResId;
-    }
-
-    public String getBirthDate() {
-        return birthDate;
-    }
-
-    public String getSchool() {
-        return school;
-    }
+    // Getters para Retrofit
+    public int getId() { return id; }
+    public String getFirstName() { return firstName; }
+    public String getLastName() { return lastName; }
+    public String getFullName() { return firstName + " " + lastName; }
+    public String getBirthDate() { return birthDate; }
+    public String getPhoto() { return photo; }
+    public boolean isStatus() { return status; }
+    public String getCreatedAt() { return createdAt; }
 }

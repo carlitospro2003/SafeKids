@@ -16,6 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.safekids.adapters.ChildrenAdapter;
 import com.example.safekids.models.Children;
+import com.example.safekids.storage.SessionManager;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,8 +61,6 @@ public class ChildrenFragment extends Fragment {
     public static ChildrenFragment newInstance(String param1, String param2) {
         ChildrenFragment fragment = new ChildrenFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -82,12 +82,9 @@ public class ChildrenFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recyclerViewChildren);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        // Lista de niños harcodeada
-        childrenList = new ArrayList<>();
-        childrenList.add(new Children("Luis Antonio", R.drawable.iconosafekids, "15/01/2017", "Kinder Estrella del Norte"));
-        childrenList.add(new Children("Daniela López", R.drawable.iconosafekids, "08/09/2016", "Escuela Primaria Benito Juárez"));
-        childrenList.add(new Children("Mateo Pérez", R.drawable.iconosafekids, "23/03/2018", "Jardín Infantil Arcoíris"));
-        childrenList.add(new Children("Carla Mendoza", R.drawable.iconosafekids, "12/12/2015", "Colegio Pequeños Genios"));
+        // 🔹 Cargar lista real desde SessionManager
+        SessionManager sessionManager = new SessionManager(getContext());
+        childrenList = sessionManager.getStudents();
 
         adapter = new ChildrenAdapter(getContext(), childrenList);
         recyclerView.setAdapter(adapter);
