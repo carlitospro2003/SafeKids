@@ -1,12 +1,16 @@
 package com.example.safekids.network;
 
 
+import com.example.safekids.models.Family;
+
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 public interface ApiService {
@@ -42,6 +46,21 @@ public interface ApiService {
             @Path("studentId") int studentId,
             @Body AddFamilyRequest request
     );
+
+    @PUT("api1/authPeoples/{id}")
+    Call<UpdateFamilyResponse> updateFamily(
+            @Header("Authorization") String token,
+            @Path("id") int id,
+            @Body Family family
+    );
+
+    @DELETE("api1/authPeoples/{id}")
+    Call<DeleteFamilyResponse> deleteFamily(
+            @Header("Authorization") String token,
+            @Path("id") int id
+    );
+
+
 
 
 

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:padding="24dp">
+
+    <!-- Título -->
+    <TextView
+        android:id="@+id/textViewDeleteTitle"
+        style="@style/successMessageText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="¿Seguro que quieres eliminar este registro?"
+        android:textAlignment="center"
+        android:textSize="22sp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Nombre autorizado -->
+    <TextView
+        android:id="@+id/textViewNameAuthorized"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Juan Antonio"
+        android:textColor="@color/black"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        app:layout_constraintTop_toBottomOf="@id/textViewDeleteTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Teléfono label -->
+    <TextView
+        android:id="@+id/textViewTitlePhone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Teléfono"
+        android:textColor="@color/strongBlueSafeKids"
+        android:textSize="18sp"
+        app:layout_constraintTop_toBottomOf="@id/textViewNameAuthorized"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <!-- Teléfono valor -->
+    <TextView
+        android:id="@+id/textViewPhoneAuthorized"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="1234567890"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        app:layout_constraintTop_toBottomOf="@id/textViewNameAuthorized"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Parentezco label -->
+    <TextView
+        android:id="@+id/textViewTitleRelatio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Parentezco"
+        android:textColor="@color/strongBlueSafeKids"
+        android:textSize="18sp"
+        app:layout_constraintTop_toBottomOf="@id/textViewTitlePhone"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <!-- Parentezco valor -->
+    <TextView
+        android:id="@+id/textViewAuthorizedRelatioship"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Hermano"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        app:layout_constraintTop_toBottomOf="@id/textViewPhoneAuthorized"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Botón Confirmar -->
+    <Button
+        android:id="@+id/buttonConfirmDelete"
+        style="@style/buttomBlueStrong"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Confirmar"
+        app:layout_constraintTop_toBottomOf="@id/textViewTitleRelatio"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Botón Cancelar -->
+    <Button
+        android:id="@+id/buttonCancel"
+        style="@style/buttomBlueStrong"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="Cancelar"
+        app:layout_constraintTop_toBottomOf="@id/buttonConfirmDelete"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -27,6 +27,16 @@ public class Family implements Serializable {
     @SerializedName("created_at")
     private String createdAt;
 
+    public Family(String firstName, String lastName, String phone,
+                  String relationship, String photo) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phone = phone;
+        this.relationship = relationship;
+        this.photo = photo;
+    }
+
+
     public int getId() { return id; }
     public String getFirstName() { return firstName; }
     public String getLastName() { return lastName; }

@@ -122,11 +122,9 @@ public class TutorsFragment extends Fragment {
     }
 
     private void loadAllAuthorizedPeoples() {
-
         String token = "Bearer " + sessionManager.getToken();
         List<Children> students = sessionManager.getStudents();
 
-        // Limpiamos lista
         familyList.clear();
 
         for (Children student : students) {
@@ -137,18 +135,29 @@ public class TutorsFragment extends Fragment {
                         public void onResponse(Call<AuthorizedResponse> call, Response<AuthorizedResponse> response) {
                             if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
                                 List<Family> authorized = response.body().getData();
-                                familyList.addAll(authorized);
+
+                                // 🔹 Filtrar solo los que tengan status true (activos)
+                                List<Family> activos = new ArrayList<>();
+                                for (Family fam : authorized) {
+                                    if (fam.isStatus()) { // ✅ usar isStatus()
+                                        activos.add(fam);
+                                    }
+                                }
+
+                                familyList.addAll(activos);
                                 familyAdapter.notifyDataSetChanged();
                             } else {
-                                Log.e("TutorFragment", "Error: " + response.message());
+                                Log.e("TutorsFragment", "Error: " + response.message());
                             }
                         }
 
                         @Override
                         public void onFailure(Call<AuthorizedResponse> call, Throwable t) {
-                            Log.e("TutorFragment", "Failure: " + t.getMessage());
+                            Log.e("TutorsFragment", "Failure: " + t.getMessage());
                         }
                     });
         }
     }
+
+
 }
