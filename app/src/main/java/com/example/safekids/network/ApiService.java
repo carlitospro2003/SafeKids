@@ -3,15 +3,24 @@ package com.example.safekids.network;
 
 import com.example.safekids.models.Family;
 
+import java.util.List;
+
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
+import okhttp3.MultipartBody;
+
 
 public interface ApiService {
 
@@ -39,13 +48,31 @@ public interface ApiService {
             @Path("studentId") int studentId
     );
 
-    @Headers("Accept: application/json")
-    @POST("api1/authPeoples/{studentId}")
-    Call<GuardianResponse> addAuthorizedFamily(
-            @Header("Authorization") String authHeader,
-            @Path("studentId") int studentId,
-            @Body AddFamilyRequest request
+    @Multipart
+    @POST("api1/authPeoples")
+    Call<AddFamilyResponse> addAuthorizedPerson(
+            @Header("Authorization") String token,
+            @Part MultipartBody.Part photo,
+            @Part("firstName") RequestBody firstName,
+            @Part("lastName") RequestBody lastName,
+            @Part("phone") RequestBody phone,
+            @Part("relationship") RequestBody relationship,
+            @Part("studentIds[]") List<RequestBody> studentIds
     );
+
+    @Multipart
+    @POST("api2/upload/authorizeds")
+    Call<GenericResponse> uploadAuthorizedPhoto(
+            @Header("Authorization") String token,
+            @Part("school_id") RequestBody schoolId,
+            @Part("id") RequestBody id,
+            @Part("firstName") RequestBody firstName,
+            @Part("lastName") RequestBody lastName,
+            @Part MultipartBody.Part file
+    );
+
+
+
 
     @PUT("api1/authPeoples/{id}")
     Call<UpdateFamilyResponse> updateFamily(
@@ -60,9 +87,24 @@ public interface ApiService {
             @Path("id") int id
     );
 
+    @POST("api1/guardians/reset-password")
+    @FormUrlEncoded
+    Call<GenericResponse> resetPassword(
+            @Field("email") String email
+    );
 
+    @POST("api1/guardians/password-challenge")
+    @FormUrlEncoded
+    Call<VerifyCodeResponse> verifyCode(
+            @Field("code") String code
+    );
 
-
-
+    @POST("api1/guardians/change-password")
+    @FormUrlEncoded
+    Call<GenericResponse> changePassword(
+            @Field("resetToken") String resetToken,
+            @Field("password") String password,
+            @Field("password_confirmation") String passwordConfirmation
+    );
 
 }

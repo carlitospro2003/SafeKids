@@ -22,6 +22,12 @@
         <item name="android:fontFamily">@font/montserrat_bold</item>
     </style>
 
+    <style name="errorMessageText">
+        <item name="android:textColor">@color/strongBlueSafeKids</item> <!-- Azul fuerte -->
+        <item name="android:textSize">18dp</item>
+        <item name="android:fontFamily">@font/montserrat_bold</item>
+    </style>
+
 
     <!-- ESTILO DE BOTON AZUL FUERTE -->
     <style name="buttomBlueStrong">
