@@ -39,7 +39,7 @@ import android.content.SharedPreferences;
 public class TwoFAActivity extends AppCompatActivity {
 
     private PinView pinView2FA;
-    private Button button2FA;
+    private Button button2FA, buttonResend;
     private TextView textView2FAError;
 
     private String temporaryToken;
@@ -91,6 +91,8 @@ public class TwoFAActivity extends AppCompatActivity {
                         sessionManager.saveToken(res.getToken());
                         sessionManager.saveGuardian(res.getData());
                         sessionManager.saveStudents(res.getStudents());
+                        sessionManager.saveSchool(res.getSchool()); // 🔹 Guardar la escuela
+
 
 
                         // Ir a MainActivity

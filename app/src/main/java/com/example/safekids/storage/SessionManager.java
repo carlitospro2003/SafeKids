@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.example.safekids.models.Children;
+import com.example.safekids.models.School;
+
 import com.example.safekids.network.GuardianResponse;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -25,6 +27,8 @@ public class SessionManager {
     private static final String KEY_PHOTO = "guardian_photo";
     private static final String KEY_STATUS = "guardian_status";
     private static final String KEY_STUDENTS = "guardian_students";
+    private static final String KEY_SCHOOL = "guardian_school";
+
 
 
     private SharedPreferences prefs;
@@ -88,6 +92,20 @@ public class SessionManager {
         Gson gson = new Gson();
         Type type = new TypeToken<List<Children>>() {}.getType();
         return gson.fromJson(json, type);
+    }
+
+    public void saveSchool(School school) {
+        Gson gson = new Gson();
+        String json = gson.toJson(school);
+        editor.putString(KEY_SCHOOL, json);
+        editor.apply();
+    }
+
+    public School getSchool() {
+        String json = prefs.getString(KEY_SCHOOL, null);
+        if (json == null) return null;
+        Gson gson = new Gson();
+        return gson.fromJson(json, School.class);
     }
 
 

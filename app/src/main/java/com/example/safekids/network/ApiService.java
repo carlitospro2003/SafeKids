@@ -99,9 +99,20 @@ public interface ApiService {
             @Field("code") String code
     );
 
+    // Reenviar código
+    @FormUrlEncoded
+    @POST("api1/guardians/resend-2fa")
+    Call<Resend2FAResponse> resend2FA(
+            @Field("email") String email
+    );
+
+    @FormUrlEncoded
+    @POST("api1/guardians/resend-2fa")
+    Call<GuardianResponse> two2FA(@Field("email") String email);
+
     @POST("api1/guardians/change-password")
     @FormUrlEncoded
-    Call<GenericResponse> changePassword(
+    Call<ChangePasswordResponse> changePassword(
             @Field("resetToken") String resetToken,
             @Field("password") String password,
             @Field("password_confirmation") String passwordConfirmation

@@ -1,7 +1,7 @@
 package com.example.safekids.network;
 
 import com.example.safekids.models.Children;
-
+import com.example.safekids.models.School;
 import java.util.List;
 
 public class GuardianResponse {
@@ -11,6 +11,8 @@ public class GuardianResponse {
     private String temporaryToken; // solo viene en login
     private String token; // solo viene en 2FA
     private List<Children> students;
+    private School school;
+
     private String timestamp;
 
     public boolean isSuccess() { return success; }
@@ -20,6 +22,8 @@ public class GuardianResponse {
     public String getToken() { return token; }
 
     public List<Children> getStudents() { return students; }
+    public School getSchool() { return school; }
+
     public String getTimestamp() { return timestamp; }
 
     public static class Guardian {

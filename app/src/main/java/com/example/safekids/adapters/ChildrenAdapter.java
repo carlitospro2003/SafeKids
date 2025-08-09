@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.safekids.ChildrenDetailActivity;
 import com.example.safekids.R;
 import com.example.safekids.models.Children;
+import com.example.safekids.storage.SessionManager;
 
 import java.util.List;
 
@@ -49,7 +50,13 @@ public class ChildrenAdapter extends RecyclerView.Adapter<ChildrenAdapter.Childr
         holder.imgChildren.setImageResource(R.drawable.iconosafekids);
 
         // 🔹 School ya no existe, dejamos vacío o un placeholder
-        holder.tvSchool.setText("Escuela no disponible");
+        //holder.tvSchool.setText("Escuela no disponible");
+        SessionManager sessionManager = new SessionManager(context);
+        if (sessionManager.getSchool() != null) {
+            holder.tvSchool.setText(sessionManager.getSchool().getName());
+        } else {
+            holder.tvSchool.setText("Escuela no disponible");
+        }
 
         holder.btnShow.setOnClickListener(v -> {
             Intent intent = new Intent(context, ChildrenDetailActivity.class);

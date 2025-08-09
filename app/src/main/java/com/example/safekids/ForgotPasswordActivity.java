@@ -1,6 +1,8 @@
 package com.example.safekids;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -30,6 +32,9 @@ public class ForgotPasswordActivity extends AppCompatActivity {
 
     private ApiService apiService;
 
+    private LoadingCustom loadingCustom;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +47,8 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         textViewResetPassError = findViewById(R.id.textViewResetPassError);
 
         apiService = ApiClient.getApiService();
+        loadingCustom = new LoadingCustom(this);
+
 
         buttonResetPassword.setOnClickListener(v -> {
             String email = editTextEmailResetPass.getText().toString().trim();
@@ -53,6 +60,8 @@ public class ForgotPasswordActivity extends AppCompatActivity {
 
             textViewResetPassError.setVisibility(View.GONE);
 
+            //loadingCustom.startLoadingCustom();
+
             apiService.resetPassword(email)
                     .enqueue(new Callback<GenericResponse>() {
                         @Override
@@ -60,6 +69,9 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                             if (response.isSuccessful() && response.body() != null) {
                                 GenericResponse body = response.body();
                                 if (body.isSuccess()) {
+                                    // Guardar el email devuelto por la API
+                                    saveEmail(body.getData());
+
                                     Toast.makeText(ForgotPasswordActivity.this, body.getMessage(), Toast.LENGTH_SHORT).show();
 
                                     // Ir a VerifyCodeActivity
@@ -68,18 +80,16 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                                     finish();
                                 } else {
                                     showError(body.getMessage());
-
                                 }
                             } else {
-                                showError("Credenciales Incorrectas");
-
+                                showError("Credenciales incorrectas");
                             }
                         }
 
                         @Override
                         public void onFailure(Call<GenericResponse> call, Throwable t) {
+                            //loadingCustom.dismissLoading();
                             showError("Error de red: " + t.getMessage());
-
                         }
                     });
         });
@@ -89,6 +99,11 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+    }
+
+    private void saveEmail(String email) {
+        SharedPreferences prefs = getSharedPreferences("SafeKidsPrefs", Context.MODE_PRIVATE);
+        prefs.edit().putString("reset_email", email).apply();
     }
     private void showError(String message) {
         textViewResetPassError.setText(message);
