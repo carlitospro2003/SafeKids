@@ -24,6 +24,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.safekids.network.ApiClient;
 import com.example.safekids.network.ApiService;
+import com.example.safekids.network.GenericResponse;
 import com.example.safekids.network.GuardianResponse;
 import com.example.safekids.network.Verify2FARequest;
 import com.example.safekids.storage.SessionManager;
@@ -39,7 +40,7 @@ import android.content.SharedPreferences;
 public class TwoFAActivity extends AppCompatActivity {
 
     private PinView pinView2FA;
-    private Button button2FA, buttonResend;
+    private Button button2FA, buttonResendCode2FA;
     private TextView textView2FAError;
 
     private String temporaryToken;
@@ -54,14 +55,21 @@ public class TwoFAActivity extends AppCompatActivity {
         setContentView(R.layout.activity_two_faactivity);
         pinView2FA = findViewById(R.id.pinView2FA);
         button2FA = findViewById(R.id.button2FA);
+        buttonResendCode2FA = findViewById(R.id.buttonResendCode2FA);
         textView2FAError = findViewById(R.id.textView2FAError);
         textView2FAError.setVisibility(View.GONE);
         apiService = ApiClient.getApiService();
         sessionManager = new SessionManager(this);
         // Recibe el temporaryToken desde LoginActivity
         temporaryToken = getIntent().getStringExtra("temporaryToken");
+        String email = getIntent().getStringExtra("email");
+
 
         button2FA.setOnClickListener(v -> verify2FA());
+
+        buttonResendCode2FA.setOnClickListener(v -> {
+            resend2FACode(email);
+        });
 
     }
 
@@ -92,6 +100,10 @@ public class TwoFAActivity extends AppCompatActivity {
                         sessionManager.saveGuardian(res.getData());
                         sessionManager.saveStudents(res.getStudents());
                         sessionManager.saveSchool(res.getSchool()); // 🔹 Guardar la escuela
+                        sessionManager.getSchoolId();
+                        sessionManager.getGuardianId();
+                        sessionManager.getAuthorizedIds();
+
 
 
 
@@ -115,6 +127,39 @@ public class TwoFAActivity extends AppCompatActivity {
                 textView2FAError.setVisibility(View.VISIBLE);
             }
         });
+    }
+
+    private void resend2FACode(String email) {
+        if (email == null || email.isEmpty()) {
+            Toast.makeText(this, "No se encontró el email", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Aquí llamas a tu endpoint para reenviar el código
+        apiService.resendTwo2FA(email).enqueue(new Callback<GuardianResponse>() {
+            @Override
+            public void onResponse(Call<GuardianResponse> call, Response<GuardianResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    GuardianResponse body = response.body();
+                    Toast.makeText(TwoFAActivity.this, body.getMessage(), Toast.LENGTH_SHORT).show();
+
+                    // Aquí guardas el email si lo necesitas
+                    String returnedEmail = null;
+                    if (body.getData() != null) {
+                        returnedEmail = body.getData().getEmail();
+                    }
+                    Log.d("EMAIL", "Email del guardian: " + returnedEmail);
+                } else {
+                    Toast.makeText(TwoFAActivity.this, "Error al reenviar el código", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GuardianResponse> call, Throwable t) {
+                Toast.makeText(TwoFAActivity.this, "Error de conexión: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
     @Override

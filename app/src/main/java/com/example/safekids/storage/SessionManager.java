@@ -29,6 +29,15 @@ public class SessionManager {
     private static final String KEY_STUDENTS = "guardian_students";
     private static final String KEY_SCHOOL = "guardian_school";
 
+    private static final String KEY_AUTHORIZED_IDS = "authorized_ids";
+
+    private static final String KEY_LAST_AUTHORIZED_ID = "last_authorized_id";
+
+    private static final String KEY_SCHOOL_ID = "school_id";
+
+
+
+
 
 
     private SharedPreferences prefs;
@@ -94,18 +103,56 @@ public class SessionManager {
         return gson.fromJson(json, type);
     }
 
+
     public void saveSchool(School school) {
         Gson gson = new Gson();
         String json = gson.toJson(school);
         editor.putString(KEY_SCHOOL, json);
+        editor.putInt(KEY_SCHOOL_ID, school.getId()); // 🔹 Guardar ID directo
         editor.apply();
     }
+
+    public int getSchoolId() {
+        return prefs.getInt(KEY_SCHOOL_ID, -1); // 🔹 Obtener ID directo
+    }
+    public int getGuardianId() {
+        return prefs.getInt(KEY_ID, -1); // 🔹 Obtener ID directo
+    }
+
 
     public School getSchool() {
         String json = prefs.getString(KEY_SCHOOL, null);
         if (json == null) return null;
         Gson gson = new Gson();
         return gson.fromJson(json, School.class);
+    }
+
+    // 🔹 NUEVO: Guardar IDs de responsables autorizados
+    public void saveAuthorizedIds(List<Integer> ids) {
+        Gson gson = new Gson();
+        String json = gson.toJson(ids);
+        editor.putString(KEY_AUTHORIZED_IDS, json);
+        editor.apply();
+    }
+
+    // 🔹 NUEVO: Obtener IDs de responsables autorizados
+    public List<Integer> getAuthorizedIds() {
+        String json = prefs.getString(KEY_AUTHORIZED_IDS, null);
+        if (json == null) return new ArrayList<>();
+        Gson gson = new Gson();
+        Type type = new TypeToken<List<Integer>>() {}.getType();
+        return gson.fromJson(json, type);
+    }
+
+    // Guardar último ID creado
+    public void saveLastAuthorizedId(int id) {
+        editor.putInt(KEY_LAST_AUTHORIZED_ID, id);
+        editor.apply();
+    }
+
+    // Obtener último ID creado
+    public int getLastAuthorizedId() {
+        return prefs.getInt(KEY_LAST_AUTHORIZED_ID, -1);
     }
 
 
@@ -124,5 +171,7 @@ public class SessionManager {
         String token = getToken();
         return token != null && !token.isEmpty();
     }
+
+
 
 }

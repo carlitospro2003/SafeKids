@@ -165,6 +165,7 @@ public class LoginActivity extends AppCompatActivity {
                         // Enviar a TwoFAActivity con el token
                         Intent intent = new Intent(LoginActivity.this, TwoFAActivity.class);
                         intent.putExtra("temporaryToken", temporaryToken);
+                        intent.putExtra("email", email);
                         startActivity(intent);
                     } else {
                         textViewLoginError.setText(res.getMessage());

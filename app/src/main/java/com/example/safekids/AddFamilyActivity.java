@@ -25,6 +25,9 @@
     import androidx.core.view.WindowInsetsCompat;
 
     import com.example.safekids.models.Children;
+    import com.example.safekids.network.AddFamilyResponse;
+    import com.example.safekids.network.ApiClient;
+    import com.example.safekids.network.ApiService;
     import com.example.safekids.network.*;
     import com.example.safekids.storage.SessionManager;
     import com.example.safekids.utils.FileUtils;
@@ -35,7 +38,9 @@
     import com.google.mlkit.vision.face.FaceDetectorOptions;
 
     import java.io.File;
+    import java.io.FileOutputStream;
     import java.io.IOException;
+    import java.io.InputStream;
     import java.util.ArrayList;
     import java.util.List;
     import okhttp3.*;
@@ -43,6 +48,11 @@
     import com.example.safekids.fregments.TutorsFragment;
 
     import de.hdodenhof.circleimageview.CircleImageView;
+    import okhttp3.MediaType;
+    import okhttp3.MultipartBody;
+    import okhttp3.RequestBody;
+    import retrofit2.Call;
+    import retrofit2.Response;
 
     public class AddFamilyActivity extends AppCompatActivity {
 
@@ -54,6 +64,9 @@
         private TextView tvErrorPhotoFamily, tvErrorNameFamily, tvErrorLastNameFamily, tvErrorPhoneFamily, tvErrorRelationshipFamily;
 
         private Uri selectedImageUri;
+
+        private ApiService apiService;
+        private SessionManager sessionManager;
 
         // Detector de rostros con configuración rápida y tracking habilitado
         private final FaceDetector detector = FaceDetection.getClient(
@@ -71,8 +84,7 @@
                     }
                 });
 
-        private ApiService apiService;
-        private SessionManager sessionManager;
+
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
@@ -136,14 +148,51 @@
             return valid;
         }
 
+        // ...existing code...
+        // ...existing code...
+        private File compressImageFromUri(Uri imageUri) throws IOException {
+            // 1. Obtener el Bitmap desde el Uri
+            InputStream input = getContentResolver().openInputStream(imageUri);
+            Bitmap originalBitmap = android.graphics.BitmapFactory.decodeStream(input);
+            input.close();
+
+            // 2. Comprimir el Bitmap a JPEG con calidad reducida
+            File compressedFile = new File(getCacheDir(), "compressed_photo.jpg");
+            int quality = 80; // Puedes bajar a 70, 60, etc. si sigue pesando mucho
+
+            do {
+                FileOutputStream out = new FileOutputStream(compressedFile);
+                originalBitmap.compress(Bitmap.CompressFormat.JPEG, quality, out);
+                out.flush();
+                out.close();
+
+                if (compressedFile.length() <= 2 * 1024 * 1024) break; // Menor a 2MB
+                quality -= 10; // Baja la calidad si sigue pesando mucho
+            } while (quality > 30); // No bajes de 30 para no perder mucha calidad
+
+            return compressedFile;
+        }
+        // ...existing code...
         private void uploadData() {
-            File file = FileUtils.getFileFromUri(this, selectedImageUri);
-            if (file == null) {
-                Toast.makeText(this, "Error con la imagen", Toast.LENGTH_SHORT).show();
+            File file;
+            try {
+                file = compressImageFromUri(selectedImageUri);
+            } catch (IOException e) {
+                Toast.makeText(this, "No se pudo procesar la imagen seleccionada", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);
+            if (file == null || !file.exists() || file.length() == 0) {
+                Toast.makeText(this, "No se pudo procesar la imagen seleccionada", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (file.length() > 2 * 1024 * 1024) {
+                Toast.makeText(this, "La imagen sigue siendo demasiado grande (máx 2MB)", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            String mimeType = "image/jpeg"; // Siempre será JPEG después de comprimir
+            RequestBody reqFile = RequestBody.create(MediaType.parse(mimeType), file);
             MultipartBody.Part photoPart = MultipartBody.Part.createFormData("photo", file.getName(), reqFile);
 
             RequestBody firstName = RequestBody.create(MediaType.parse("text/plain"), edtNameFamily.getText().toString().trim());
@@ -164,11 +213,63 @@
                         @Override
                         public void onResponse(retrofit2.Call<AddFamilyResponse> call, retrofit2.Response<AddFamilyResponse> response) {
                             if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
+                                // Laravel OK, ahora llama a Python
+                                int schoolId = sessionManager.getSchoolId();
+                                int authorizedId = response.body().getData().getId();
+                                String firstNameStr = edtNameFamily.getText().toString().trim();
+                                String lastNameStr = edtLastNameFamily.getText().toString().trim();
+
+                                // Prepara los RequestBody para Python
+                                RequestBody schoolIdBody = RequestBody.create(MediaType.parse("text/plain"), String.valueOf(schoolId));
+                                RequestBody idBody = RequestBody.create(MediaType.parse("text/plain"), String.valueOf(authorizedId));
+                                RequestBody firstNameBody = RequestBody.create(MediaType.parse("text/plain"), firstNameStr);
+                                RequestBody lastNameBody = RequestBody.create(MediaType.parse("text/plain"), lastNameStr);
+                                RequestBody reqFilePython = RequestBody.create(MediaType.parse("image/jpeg"), file);
+                                MultipartBody.Part filePart = MultipartBody.Part.createFormData("file", file.getName(), reqFilePython);
+
+                                ApiService apiServicePython = ApiClientPython.getApiService();
+                                String tokenPython = "Bearer " + sessionManager.getToken();
+
+                                apiServicePython.uploadAuthorizedPhoto(tokenPython, schoolIdBody, idBody, firstNameBody, lastNameBody, filePart)
+                                                .enqueue(new retrofit2.Callback<GenericResponse>() {
+
+                                                    @Override
+                                                    public void onResponse(Call<GenericResponse> call, Response<GenericResponse> response) {
+                                                        if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
+                                                            Toast.makeText(AddFamilyActivity.this, "Imagen guardada en Python correctamente", Toast.LENGTH_SHORT).show();
+                                                        } else {
+                                                            String errorMsg = "Error al guardar imagen en Python";
+                                                            if (response.errorBody() != null) {
+                                                                try {
+                                                                    errorMsg = response.errorBody().string();
+                                                                } catch (IOException e) {}
+                                                            }
+                                                            Toast.makeText(AddFamilyActivity.this, errorMsg, Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    }
+
+                                                    @Override
+                                                    public void onFailure(Call<GenericResponse> call, Throwable t) {
+                                                        Toast.makeText(AddFamilyActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+
+
+                                                    }
+                                                });
+
                                 Toast.makeText(AddFamilyActivity.this, "Responsable agregado correctamente", Toast.LENGTH_LONG).show();
                                 startActivity(new Intent(AddFamilyActivity.this, MainActivity.class).putExtra("openFragment", "tutors"));
                                 finish();
                             } else {
-                                Toast.makeText(AddFamilyActivity.this, "Error al guardar responsable", Toast.LENGTH_SHORT).show();
+                                String errorMsg = "Error al guardar responsable";
+                                if (response.errorBody() != null) {
+                                    try {
+                                        errorMsg = response.errorBody().string();
+                                        android.util.Log.e("API_ERROR", errorMsg);
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                                Toast.makeText(AddFamilyActivity.this, errorMsg, Toast.LENGTH_SHORT).show();
                             }
                         }
 
@@ -178,6 +279,8 @@
                         }
                     });
         }
+// ...existing code...
+
 
         private void checkPermissionAndOpenGallery() {
             if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2) {

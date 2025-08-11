@@ -49,7 +49,7 @@ public interface ApiService {
     );
 
     @Multipart
-    @POST("api1/authPeoples")
+    @POST("api1/authPeoples/create")
     Call<AddFamilyResponse> addAuthorizedPerson(
             @Header("Authorization") String token,
             @Part MultipartBody.Part photo,
@@ -74,14 +74,14 @@ public interface ApiService {
 
 
 
-    @PUT("api1/authPeoples/{id}")
+    @PUT("api1/authPeoples/edit/{id}")
     Call<UpdateFamilyResponse> updateFamily(
             @Header("Authorization") String token,
             @Path("id") int id,
             @Body Family family
     );
 
-    @DELETE("api1/authPeoples/{id}")
+    @DELETE("api1/authPeoples/delete/{id}")
     Call<DeleteFamilyResponse> deleteFamily(
             @Header("Authorization") String token,
             @Path("id") int id
@@ -108,7 +108,7 @@ public interface ApiService {
 
     @FormUrlEncoded
     @POST("api1/guardians/resend-2fa")
-    Call<GuardianResponse> two2FA(@Field("email") String email);
+    Call<GuardianResponse> resendTwo2FA(@Field("email") String email);
 
     @POST("api1/guardians/change-password")
     @FormUrlEncoded

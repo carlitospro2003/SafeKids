@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -84,6 +85,11 @@ public class ChildrenFragment extends Fragment {
 
         // 🔹 Cargar lista real desde SessionManager
         SessionManager sessionManager = new SessionManager(getContext());
+        TextView textViewUser = view.findViewById(R.id.textViewUser);
+        if (sessionManager.getGuardian() != null) {
+            String nombre = sessionManager.getGuardian().getFirstName();
+            textViewUser.setText(nombre != null ? nombre : "Usuario");
+        }
         childrenList = sessionManager.getStudents();
 
         adapter = new ChildrenAdapter(getContext(), childrenList);

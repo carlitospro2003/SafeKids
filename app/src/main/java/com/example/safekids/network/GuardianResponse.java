@@ -10,6 +10,7 @@ public class GuardianResponse {
     private Guardian data;
     private String temporaryToken; // solo viene en login
     private String token; // solo viene en 2FA
+    private String email;
     private List<Children> students;
     private School school;
 
@@ -20,6 +21,7 @@ public class GuardianResponse {
     public Guardian getData() { return data; }
     public String getTemporaryToken() { return temporaryToken; }
     public String getToken() { return token; }
+    public String getEmail() { return email; }
 
     public List<Children> getStudents() { return students; }
     public School getSchool() { return school; }

@@ -10,6 +10,7 @@ import java.io.*;
 
 
 public class FileUtils {
+
     public static File getFileFromUri(Context context, Uri uri) {
         String fileName = getFileName(context, uri);
         File file = new File(context.getCacheDir(), fileName);

@@ -126,6 +126,7 @@ public class TutorsFragment extends Fragment {
         List<Children> students = sessionManager.getStudents();
 
         familyList.clear();
+        List<Integer> allAuthorizedIds = new ArrayList<>(); // 🔹 Para guardar todos los IDs
 
         for (Children student : students) {
             int studentId = student.getId();
@@ -141,9 +142,11 @@ public class TutorsFragment extends Fragment {
                                 for (Family fam : authorized) {
                                     if (fam.isStatus()) { // ✅ usar isStatus()
                                         activos.add(fam);
+                                        allAuthorizedIds.add(fam.getId());
                                     }
                                 }
 
+                                sessionManager.saveAuthorizedIds(allAuthorizedIds);
                                 familyList.addAll(activos);
                                 familyAdapter.notifyDataSetChanged();
                             } else {
