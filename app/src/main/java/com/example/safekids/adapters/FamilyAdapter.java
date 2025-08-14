@@ -13,6 +13,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
 import com.example.safekids.DeleteDialog;
 import com.example.safekids.EditFamilyActivity;
 import com.example.safekids.R;
@@ -20,6 +22,7 @@ import com.example.safekids.network.DeleteFamilyResponse;
 import com.example.safekids.models.Family;
 import com.example.safekids.network.ApiClient;
 import com.example.safekids.network.ApiService;
+import com.example.safekids.storage.ExtraDataManager;
 import com.example.safekids.storage.SessionManager;
 
 import java.util.List;
@@ -36,6 +39,7 @@ public class FamilyAdapter extends RecyclerView.Adapter<FamilyAdapter.FamilyView
 
     private final ApiService apiService;
     private final SessionManager sessionManager;
+    private final ExtraDataManager extraDataManager;
 
     public FamilyAdapter(Context context, List<Family> familyList)
     {
@@ -43,6 +47,7 @@ public class FamilyAdapter extends RecyclerView.Adapter<FamilyAdapter.FamilyView
         this.familyList = familyList;
         this.apiService = ApiClient.getApiService();
         this.sessionManager = new SessionManager(context);
+        this.extraDataManager = new ExtraDataManager(context);
     }
 
     @NonNull
@@ -61,8 +66,19 @@ public class FamilyAdapter extends RecyclerView.Adapter<FamilyAdapter.FamilyView
         holder.tvPhone.setText(member.getPhone());
 
         // Por ahora usamos imagen por defecto
-        holder.imgFamily.setImageResource(R.drawable.iconosafekids);
-
+        // Cargar imagen del responsable
+        String imgRoute = member.getPhoto();
+        int schoolId = extraDataManager.getSchoolId();
+        if (imgRoute != null && !imgRoute.isEmpty() && schoolId != -1) {
+            String imageUrl = "https://apidev.safekids.site/imagenes/" + schoolId + "/AUTHORIZEDS/" + imgRoute;
+            Glide.with(context)
+                    .load(imageUrl)
+                    .placeholder(R.drawable.iconosafekids)
+                    .error(R.drawable.iconosafekids)
+                    .into(holder.imgFamily);
+        } else {
+            holder.imgFamily.setImageResource(R.drawable.iconosafekids);
+        }
         // Evento botón Editar
         holder.btnEdit.setOnClickListener(v -> {
             Intent intent = new Intent(context, EditFamilyActivity.class);

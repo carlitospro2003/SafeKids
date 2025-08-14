@@ -10,10 +10,13 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import com.bumptech.glide.Glide;
 
 import com.example.safekids.ChildrenDetailActivity;
 import com.example.safekids.R;
 import com.example.safekids.models.Children;
+import com.example.safekids.storage.ExtraDataManager;
+
 import com.example.safekids.storage.SessionManager;
 
 import java.util.List;
@@ -24,10 +27,13 @@ public class ChildrenAdapter extends RecyclerView.Adapter<ChildrenAdapter.Childr
 
     private List<Children> childrenList;
     private Context context;
+    private ExtraDataManager extraDataManager;
 
     public ChildrenAdapter(Context context, List<Children> childrenList) {
         this.context = context;
         this.childrenList = childrenList;
+        this.extraDataManager = new ExtraDataManager(context);
+
     }
 
     @NonNull
@@ -46,8 +52,19 @@ public class ChildrenAdapter extends RecyclerView.Adapter<ChildrenAdapter.Childr
         holder.tvChildrenName.setText(child.getFullName());
         holder.tvDateOfBirth.setText(child.getBirthDate());
 
-        // 🔹 Foto por defecto
-        holder.imgChildren.setImageResource(R.drawable.iconosafekids);
+        // Cargar foto del niño con Glide usando school_id
+        int schoolId = extraDataManager.getSchoolId();
+        String photo = child.getPhoto();
+        if (schoolId != -1 && photo != null) {
+            String imageUrl = "https://apidev.safekids.site/imagenes/" + schoolId + "/STUDENTS/" + photo;
+            Glide.with(context)
+                    .load(imageUrl)
+                    .placeholder(R.drawable.iconosafekids)
+                    .error(R.drawable.iconosafekids)
+                    .into(holder.imgChildren);
+        } else {
+            holder.imgChildren.setImageResource(R.drawable.iconosafekids);
+        }
 
         // 🔹 School ya no existe, dejamos vacío o un placeholder
         //holder.tvSchool.setText("Escuela no disponible");
@@ -58,11 +75,17 @@ public class ChildrenAdapter extends RecyclerView.Adapter<ChildrenAdapter.Childr
             holder.tvSchool.setText("Escuela no disponible");
         }
 
+        // Configurar botón para ver detalles
         holder.btnShow.setOnClickListener(v -> {
             Intent intent = new Intent(context, ChildrenDetailActivity.class);
             intent.putExtra("name", child.getFullName());
             intent.putExtra("birthDate", child.getBirthDate());
-            intent.putExtra("photo", child.getPhoto());
+            // Pasar la URL completa de la foto para ChildrenDetailActivity
+            if (schoolId != -1 && photo != null) {
+                intent.putExtra("photo", "https://apidev.safekids.site/imagenes/" + schoolId + "/STUDENTS/" + photo);
+            } else {
+                intent.putExtra("photo", "");
+            }
             context.startActivity(intent);
         });
 

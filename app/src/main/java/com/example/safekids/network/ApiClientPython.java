@@ -5,7 +5,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ApiClientPython {
 
     // 🔹 Cambia por la URL base de tu API de Python
-    private static final String BASE_URL = "http://192.168.1.18:8001";
+    private static final String BASE_URL = "https://apidev2.safekids.site/";
     private static Retrofit retrofit;
 
     public static Retrofit getRetrofit() {

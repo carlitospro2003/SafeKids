@@ -36,10 +36,6 @@ public class SessionManager {
     private static final String KEY_SCHOOL_ID = "school_id";
 
 
-
-
-
-
     private SharedPreferences prefs;
     private SharedPreferences.Editor editor;
 

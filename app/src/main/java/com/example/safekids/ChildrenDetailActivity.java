@@ -13,10 +13,17 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.bumptech.glide.Glide;
+import com.example.safekids.storage.ExtraDataManager;
+import com.example.safekids.R;
+
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class ChildrenDetailActivity extends AppCompatActivity {
 
-    private TextView txtNameChildren, txtLastNameChildren, txtDateChildren, txtSchoolChildren;
-    private ImageView imgChildren;
+    private TextView tvName, tvBirth, tvSchool;
+    private CircleImageView imgChild;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,23 +31,36 @@ public class ChildrenDetailActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_children_detail);
 
-        TextView tvName = findViewById(R.id.txtNameChildren);
-        ImageView imgChild = findViewById(R.id.photoDetailChildren);
-        TextView tvBirth = findViewById(R.id.txtDateChildren);
-        TextView tvSchool = findViewById(R.id.txtSchoolChildren);
+        // Inicializar vistas
+        tvName = findViewById(R.id.txtNameChildren);
+        tvBirth = findViewById(R.id.txtDateChildren);
+        tvSchool = findViewById(R.id.txtSchoolChildren);
+        imgChild = findViewById(R.id.photoDetailChildren);
 
+        // Recupera los extras
         // Recupera los extras
         Intent intent = getIntent();
         String name = intent.getStringExtra("name");
-        int imageResId = intent.getIntExtra("imageResId", R.drawable.iconosafekids);
         String birthDate = intent.getStringExtra("birthDate");
         String school = intent.getStringExtra("school");
+        String photoUrl = intent.getStringExtra("photo");
 
         // Muestra los datos
-        tvName.setText(name);
-        imgChild.setImageResource(imageResId);
-        tvBirth.setText(birthDate);
-        tvSchool.setText(school);
+        tvName.setText(name != null ? name : "Nombre no disponible");
+        tvBirth.setText(birthDate != null ? birthDate : "Fecha no disponible");
+        tvSchool.setText(school != null ? school : "Escuela no disponible");
+
+        // Muestra los datos
+        // Cargar la imagen con Glide
+        if (photoUrl != null && !photoUrl.isEmpty()) {
+            Glide.with(this)
+                    .load(photoUrl)
+                    .placeholder(R.drawable.iconosafekids)
+                    .error(R.drawable.iconosafekids)
+                    .into(imgChild);
+        } else {
+            imgChild.setImageResource(R.drawable.iconosafekids);
+        }
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());

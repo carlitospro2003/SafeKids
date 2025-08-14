@@ -27,6 +27,7 @@ import com.example.safekids.network.ApiService;
 import com.example.safekids.network.GenericResponse;
 import com.example.safekids.network.GuardianResponse;
 import com.example.safekids.network.Verify2FARequest;
+import com.example.safekids.storage.ExtraDataManager;
 import com.example.safekids.storage.SessionManager;
 import com.chaos.view.PinView;
 
@@ -100,9 +101,12 @@ public class TwoFAActivity extends AppCompatActivity {
                         sessionManager.saveGuardian(res.getData());
                         sessionManager.saveStudents(res.getStudents());
                         sessionManager.saveSchool(res.getSchool()); // 🔹 Guardar la escuela
-                        sessionManager.getSchoolId();
-                        sessionManager.getGuardianId();
-                        sessionManager.getAuthorizedIds();
+
+                        // 🔹 Guardar datos extra en ExtraDataManager
+                        ExtraDataManager extraDataManager = new ExtraDataManager(TwoFAActivity.this);
+                        extraDataManager.saveGuardianId(res.getData().getId());
+                        extraDataManager.saveGuardianPhoto(res.getData().getPhoto());
+                        extraDataManager.saveSchoolId(res.getSchool().getId());
 
 
 

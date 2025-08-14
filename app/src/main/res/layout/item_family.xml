@@ -122,6 +122,7 @@
                 android:layout_marginEnd="8dp"
                 android:text="Editar"
                 android:textAllCaps="false"
+                style="@style/buttomBlueStrong"
                 android:backgroundTint="@color/white"
                 android:textColor="@color/strongBlueSafeKids" />
 
@@ -132,6 +133,7 @@
                 android:layout_weight="1"
                 android:text="Eliminar"
                 android:textAllCaps="false"
+                style="@style/buttomBlueStrong"
                 android:backgroundTint="@color/white"
                 android:textColor="@color/strongBlueSafeKids" />
         </LinearLayout>

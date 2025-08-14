@@ -118,4 +118,25 @@ public interface ApiService {
             @Field("password_confirmation") String passwordConfirmation
     );
 
+    @Headers("Accept: application/json")
+    @GET("notifications/my-notifications/{studentId}/{dayFilter}")
+    Call<NotificationResponse> getNotifications(
+            @Header("Authorization") String token,
+            @Path("studentId") String studentId,
+            @Path("dayFilter") int dayFilter
+    );
+
+    @Headers("Accept: application/json")
+    @GET("api1/guardians/all/{studentId}")
+    Call<GuardiansResponse> getGuardians(
+            @Header("Authorization") String token,
+            @Path("studentId") int studentId
+    );
+
+    @Headers("Accept: application/json")
+    @POST("api1/guardians/refresh-token")
+    Call<RefreshTokenResponse> refreshToken(
+            @Header("Authorization") String token
+    );
+
 }

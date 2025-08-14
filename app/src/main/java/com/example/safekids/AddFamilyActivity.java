@@ -29,6 +29,7 @@
     import com.example.safekids.network.ApiClient;
     import com.example.safekids.network.ApiService;
     import com.example.safekids.network.*;
+    import com.example.safekids.storage.ExtraDataManager;
     import com.example.safekids.storage.SessionManager;
     import com.example.safekids.utils.FileUtils;
     import com.google.mlkit.vision.common.InputImage;
@@ -214,7 +215,10 @@
                         public void onResponse(retrofit2.Call<AddFamilyResponse> call, retrofit2.Response<AddFamilyResponse> response) {
                             if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
                                 // Laravel OK, ahora llama a Python
-                                int schoolId = sessionManager.getSchoolId();
+
+                                ExtraDataManager extraDataManager = new ExtraDataManager(AddFamilyActivity.this);
+
+                                int schoolId = extraDataManager.getSchoolId();
                                 int authorizedId = response.body().getData().getId();
                                 String firstNameStr = edtNameFamily.getText().toString().trim();
                                 String lastNameStr = edtLastNameFamily.getText().toString().trim();

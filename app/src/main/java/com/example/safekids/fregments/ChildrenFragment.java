@@ -1,9 +1,6 @@
 package com.example.safekids.fregments;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,15 +12,16 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.example.safekids.R;
 import com.example.safekids.adapters.ChildrenAdapter;
 import com.example.safekids.models.Children;
+import com.example.safekids.storage.ExtraDataManager;
 import com.example.safekids.storage.SessionManager;
 
-
-import java.util.ArrayList;
 import java.util.List;
 
-import com.example.safekids.R;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -85,10 +83,32 @@ public class ChildrenFragment extends Fragment {
 
         // 🔹 Cargar lista real desde SessionManager
         SessionManager sessionManager = new SessionManager(getContext());
+        ExtraDataManager extraDataManager = new ExtraDataManager(getContext());
+
         TextView textViewUser = view.findViewById(R.id.textViewUser);
+        CircleImageView imgPerfil = view.findViewById(R.id.imgPerfil);
+
         if (sessionManager.getGuardian() != null) {
             String nombre = sessionManager.getGuardian().getFirstName();
             textViewUser.setText(nombre != null ? nombre : "Usuario");
+
+            // Cargar la imagen del tutor con Glide usando school_id
+            int schoolId = extraDataManager.getSchoolId();
+            String guardianPhoto = sessionManager.getGuardian().getPhoto();
+            if (schoolId != -1 && guardianPhoto != null) {
+                String imageUrl = "https://apidev.safekids.site/imagenes/" + schoolId + "/GUARDIANS/" + guardianPhoto;
+                Glide.with(this)
+                        .load(imageUrl)
+                        .placeholder(R.drawable.iconosafekids)
+                        .error(R.drawable.iconosafekids)
+                        .into(imgPerfil);
+            } else {
+                // Cargar imagen por defecto si no hay datos
+                imgPerfil.setImageResource(R.drawable.iconosafekids);
+            }
+        } else {
+            textViewUser.setText("Usuario");
+            imgPerfil.setImageResource(R.drawable.iconosafekids);
         }
         childrenList = sessionManager.getStudents();
 

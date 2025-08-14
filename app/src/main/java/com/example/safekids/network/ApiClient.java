@@ -4,7 +4,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClient {
-    private static final String BASE_URL = "http://192.168.1.18:8000/"; // Reemplaza con tu IP local
+    private static final String BASE_URL = "https://apidev.safekids.site/"; // Reemplaza con tu IP local
     private static Retrofit retrofit;
 
     public static Retrofit getRetrofit() {
