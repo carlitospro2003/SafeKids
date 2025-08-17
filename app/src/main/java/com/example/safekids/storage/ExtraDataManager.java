@@ -22,6 +22,7 @@ public class ExtraDataManager {
     private static final String KEY_TUTOR_IMG_ROUTES = "tutors_img_routes";
 
     private static final String KEY_CHILDREN_PHOTOS = "children_photos";
+    private static final String KEY_CHILDREN_IDS = "children_ids";
 
 
     private SharedPreferences prefs;
@@ -130,5 +131,21 @@ public class ExtraDataManager {
     public List<String> getChildrenPhotos() {
         Set<String> set = prefs.getStringSet(KEY_CHILDREN_PHOTOS, new HashSet<>());
         return new ArrayList<>(set);
+    }
+    // Guardar lista de IDs de niños
+    public void saveChildrenIds(List<Integer> ids) {
+        List<String> strIds = new ArrayList<>();
+        for (Integer id : ids) strIds.add(String.valueOf(id));
+        editor.putStringSet(KEY_CHILDREN_IDS, new HashSet<>(strIds)).apply();
+    }
+
+    // Obtener lista de IDs de niños
+    public List<Integer> getChildrenIds() {
+        Set<String> set = prefs.getStringSet(KEY_CHILDREN_IDS, new HashSet<>());
+        List<Integer> ids = new ArrayList<>();
+        for (String s : set) {
+            try { ids.add(Integer.parseInt(s)); } catch (Exception ignored) {}
+        }
+        return ids;
     }
 }

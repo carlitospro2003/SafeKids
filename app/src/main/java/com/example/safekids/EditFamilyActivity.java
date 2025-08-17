@@ -1,5 +1,5 @@
 package com.example.safekids;
-
+import com.bumptech.glide.Glide;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -9,6 +9,7 @@ import com.example.safekids.models.Family;
 import com.example.safekids.network.ApiClient;
 import com.example.safekids.network.ApiService;
 import com.example.safekids.network.UpdateFamilyResponse;
+import com.example.safekids.storage.ExtraDataManager;
 import com.example.safekids.storage.SessionManager;
 
 import androidx.activity.EdgeToEdge;
@@ -20,14 +21,17 @@ import androidx.core.view.WindowInsetsCompat;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class EditFamilyActivity extends AppCompatActivity {
 
     private EditText etFirstName, etLastName, etPhone, etRelationship;
     private Button btnSave;
+    private CircleImageView imgEditFamily;
     private Family family;
     private ApiService apiService;
     private SessionManager sessionManager;
+    private ExtraDataManager extraDataManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,10 +44,13 @@ public class EditFamilyActivity extends AppCompatActivity {
         etPhone = findViewById(R.id.editTextEditPhoneFamily);
         etRelationship = findViewById(R.id.editTextEditRelationFamily);
         btnSave = findViewById(R.id.buttomEditFamily);
+        imgEditFamily = findViewById(R.id.photoEditFamily);
 
         apiService = ApiClient.getApiService();
         sessionManager = new SessionManager(this);
+        extraDataManager = new ExtraDataManager(this);
 
+        // Recibir datos
         // Recibir datos
         family = (Family) getIntent().getSerializableExtra("family");
         if (family != null) {
@@ -51,6 +58,20 @@ public class EditFamilyActivity extends AppCompatActivity {
             etLastName.setText(family.getLastName());
             etPhone.setText(family.getPhone());
             etRelationship.setText(family.getRelationship());
+
+            // Cargar imagen del responsable
+            String photo = family.getPhoto();
+            int schoolId = extraDataManager.getSchoolId();
+            if (photo != null && !photo.isEmpty() && schoolId != -1) {
+                String imageUrl = "https://apidev.safekids.site/imagenes/" + schoolId + "/AUTHORIZEDS/" + photo;
+                Glide.with(this)
+                        .load(imageUrl)
+                        .placeholder(R.drawable.iconosafekids)
+                        .error(R.drawable.iconosafekids)
+                        .into(imgEditFamily);
+            } else {
+                imgEditFamily.setImageResource(R.drawable.iconosafekids);
+            }
         }
 
         btnSave.setOnClickListener(v -> updateFamily());

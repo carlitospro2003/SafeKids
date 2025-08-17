@@ -119,7 +119,7 @@ public interface ApiService {
     );
 
     @Headers("Accept: application/json")
-    @GET("notifications/my-notifications/{studentId}/{dayFilter}")
+    @GET("api1/notifications/my-notifications/{studentId}/{dayFilter}")
     Call<NotificationResponse> getNotifications(
             @Header("Authorization") String token,
             @Path("studentId") String studentId,
@@ -138,5 +138,8 @@ public interface ApiService {
     Call<RefreshTokenResponse> refreshToken(
             @Header("Authorization") String token
     );
+
+    @GET("api1/guardians/my-kids")
+    Call<MyKidsResponse> getMyKids(@Header("Authorization") String token);
 
 }

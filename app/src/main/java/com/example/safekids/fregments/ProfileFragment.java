@@ -2,7 +2,7 @@ package com.example.safekids.fregments;
 
 import android.content.Intent;
 import android.os.Bundle;
-
+import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -12,15 +12,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-
+import com.bumptech.glide.Glide;
 import com.example.safekids.EditProfileActivity;
 import com.example.safekids.LoginActivity;
 import com.example.safekids.R;
 import com.example.safekids.network.ApiClient;
 import com.example.safekids.network.ApiService;
 import com.example.safekids.network.GuardianResponse;
+import com.example.safekids.storage.ExtraDataManager;
 import com.example.safekids.storage.SessionManager;
-
+import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -34,7 +35,9 @@ public class ProfileFragment extends Fragment {
 
     private TextView nameGuardian, lastnameGuardian, emailGuardian, passwordGuardian, phoneGuardian;
     private Button buttonLogout, btnEditProfile;
+    private CircleImageView imgProfile;
     private SessionManager sessionManager;
+    private ExtraDataManager extraDataManager;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -84,6 +87,7 @@ public class ProfileFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
         sessionManager = new SessionManager(requireContext());
+        extraDataManager = new ExtraDataManager(requireContext());
         //Referencias a los textView
         nameGuardian = view.findViewById(R.id.nameGuardian);
         lastnameGuardian = view.findViewById(R.id.lastnameGuardian);
@@ -92,6 +96,7 @@ public class ProfileFragment extends Fragment {
         phoneGuardian = view.findViewById(R.id.phoneGuardian);
         buttonLogout = view.findViewById(R.id.buttomLogoutProfile);
         btnEditProfile = view.findViewById(R.id.buttomEditProfile);
+        imgProfile = view.findViewById(R.id.imgProfile);
 
         btnEditProfile.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), EditProfileActivity.class);
@@ -103,11 +108,28 @@ public class ProfileFragment extends Fragment {
         GuardianResponse.Guardian guardian = sessionManager.getGuardian();
 
         if (guardian != null) {
-            String fullName = guardian.getFirstName() + " " + guardian.getLastName();
             nameGuardian.setText(guardian.getFirstName());
             lastnameGuardian.setText(guardian.getLastName());
             emailGuardian.setText(guardian.getEmail());
             phoneGuardian.setText(guardian.getPhone());
+
+            // Cargar imagen del guardián
+            String photo = guardian.getPhoto();
+            int schoolId = extraDataManager.getSchoolId();
+            if (photo != null && !photo.isEmpty() && schoolId != -1) {
+                String imageUrl = "https://apidev.safekids.site/imagenes/" + schoolId + "/GUARDIANS/" + photo;
+                Log.d("ProfileFragment", "Loading image URL: " + imageUrl);
+                Glide.with(requireContext())
+                        .load(imageUrl)
+                        .placeholder(R.drawable.iconosafekids)
+                        .error(R.drawable.iconosafekids)
+                        .into(imgProfile);
+            } else {
+                Log.d("ProfileFragment", "Photo or schoolId invalid: photo=" + photo + ", schoolId=" + schoolId);
+                imgProfile.setImageResource(R.drawable.iconosafekids);
+            }
+        } else {
+            Log.e("ProfileFragment", "Guardian is null");
         }
 
         // Acción de cerrar sesión

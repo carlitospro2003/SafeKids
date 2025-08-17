@@ -7,14 +7,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
-
-import androidx.core.app.NotificationCompat;
-import androidx.fragment.app.Fragment;
-
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -23,6 +19,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -44,16 +41,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link NotificationsFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class NotificationsFragment extends Fragment {
 
     private RecyclerView recyclerView;
@@ -66,39 +57,20 @@ public class NotificationsFragment extends Fragment {
     private Map<String, Integer> dateFilterMap;
     private Handler handler;
     private Runnable pollingRunnable;
-
-    private static final long POLLING_INTERVAL = 8000; // 8 segundos
-
-    private Set<Integer> shownNotificationIds; // Para rastrear notificaciones mostradas
-
-
-
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private static final long POLLING_INTERVAL = 8000;
+    private Set<Integer> shownNotificationIds;
 
     private static final String CHANNEL_ID = "SafeKidsNotifications";
     private static final int NOTIFICATION_ID_BASE = 1000;
 
+    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
+    private String mParam1;
+    private String mParam2;
+
     public NotificationsFragment() {
-        // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment NotificationsFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static NotificationsFragment newInstance(String param1, String param2) {
         NotificationsFragment fragment = new NotificationsFragment();
         Bundle args = new Bundle();
@@ -120,33 +92,24 @@ public class NotificationsFragment extends Fragment {
         notificationList = new ArrayList<>();
         shownNotificationIds = new HashSet<>();
         handler = new Handler(Looper.getMainLooper());
-        // Mapa para opciones de filtro de fechas
         dateFilterMap = new HashMap<>();
         dateFilterMap.put("Hoy", 1);
         dateFilterMap.put("Esta semana", 2);
         dateFilterMap.put("Este mes", 3);
         dateFilterMap.put("Todos", 4);
-
         createNotificationChannel();
-
     }
 
-
-    @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-
         View view = inflater.inflate(R.layout.fragment_notifications, container, false);
-
 
         recyclerView = view.findViewById(R.id.recyclerViewNotifications);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         dropdownKids = view.findViewById(R.id.drop_children);
         dropdownDates = view.findViewById(R.id.dropdown_dates);
 
-        // Configurar dropdown de niños
         students = sessionManager.getStudents();
         List<String> kidsOptions = new ArrayList<>();
         kidsOptions.add("Todos");
@@ -156,21 +119,24 @@ public class NotificationsFragment extends Fragment {
         ArrayAdapter<String> kidsAdapter = new ArrayAdapter<>(requireContext(),
                 android.R.layout.simple_dropdown_item_1line, kidsOptions);
         dropdownKids.setAdapter(kidsAdapter);
+        dropdownKids.setText("Todos", false);
 
-        // Configurar dropdown de fechas
         String[] dateOptions = {"Hoy", "Esta semana", "Este mes", "Todos"};
         ArrayAdapter<String> datesAdapter = new ArrayAdapter<>(requireContext(),
                 android.R.layout.simple_dropdown_item_1line, dateOptions);
         dropdownDates.setAdapter(datesAdapter);
+        dropdownDates.setText("Todos", false);
 
-        // Inicializar adaptador
         adapter = new NotificationsAdapter(notificationList);
         recyclerView.setAdapter(adapter);
 
-        // Cargar notificaciones iniciales (por ejemplo, todas las notificaciones)
+        Log.d("NotificationsFragment", "Students loaded: " + students.size());
+        for (Children student : students) {
+            Log.d("NotificationsFragment", "Student: " + student.getFirstName() + " " + student.getLastName() + ", ID: " + student.getId());
+        }
+
         fetchNotifications("All", 4);
 
-        // Listener para Kids
         dropdownKids.setOnItemClickListener((parent, view1, position, id) -> {
             String selectedKid = kidsOptions.get(position);
             String selectedDate = dropdownDates.getText().toString();
@@ -180,7 +146,6 @@ public class NotificationsFragment extends Fragment {
             Toast.makeText(getContext(), "Filtrando por niño: " + selectedKid, Toast.LENGTH_SHORT).show();
         });
 
-        // Listener para Fecha
         dropdownDates.setOnItemClickListener((parent, view1, position, id) -> {
             String selectedDate = dateOptions[position];
             String selectedKid = dropdownKids.getText().toString();
@@ -190,16 +155,14 @@ public class NotificationsFragment extends Fragment {
             Toast.makeText(getContext(), "Filtrando por fecha: " + selectedDate, Toast.LENGTH_SHORT).show();
         });
 
-        startPolling();
-
         return view;
-
     }
 
     private void fetchNotifications(String studentId, int dayFilter) {
         String token = sessionManager.getToken();
-        if (token == null) {
-            Log.e("NotificationsFragment", "Token is null");
+        Log.d("NotificationsFragment", "Token used: " + token);
+        if (token == null || token.isEmpty()) {
+            Log.e("NotificationsFragment", "Token is null or empty");
             if (isAdded()) {
                 Toast.makeText(requireContext(), "Sesión no iniciada", Toast.LENGTH_SHORT).show();
             }
@@ -207,6 +170,7 @@ public class NotificationsFragment extends Fragment {
         }
         token = "Bearer " + token;
 
+        Log.d("NotificationsFragment", "Fetching notifications for studentId: " + studentId + ", dayFilter: " + dayFilter);
         apiService.getNotifications(token, studentId, dayFilter).enqueue(new Callback<NotificationResponse>() {
             @Override
             public void onResponse(Call<NotificationResponse> call, Response<NotificationResponse> response) {
@@ -214,12 +178,20 @@ public class NotificationsFragment extends Fragment {
                     Log.w("NotificationsFragment", "Fragment not attached, ignoring response");
                     return;
                 }
+                Log.d("NotificationsFragment", "API response code: " + response.code());
                 if (response.isSuccessful() && response.body() != null) {
                     NotificationResponse res = response.body();
+                    Log.d("NotificationsFragment", "API response body: " + res);
                     if (res.isSuccess()) {
-                        List<Notifications> newNotifications = res.getData();
-                        // Mostrar notificaciones nuevas
+                        List<Notifications> newNotifications = res.getData() != null ? res.getData() : new ArrayList<>();
+                        Log.d("NotificationsFragment", "Received " + newNotifications.size() + " notifications");
                         for (Notifications notification : newNotifications) {
+                            Log.d("NotificationsFragment", "Notification ID: " + notification.getId() +
+                                    ", Description: " + notification.getDescription() +
+                                    ", LastMessage: " + notification.getLastMessage() +
+                                    ", StudentId: " + notification.getStudentId() +
+                                    ", CreatedAt: " + notification.getCreatedAt() +
+                                    ", Photo: " + notification.getPhoto());
                             if (!shownNotificationIds.contains(notification.getId())) {
                                 showNotification(notification);
                                 shownNotificationIds.add(notification.getId());
@@ -228,13 +200,24 @@ public class NotificationsFragment extends Fragment {
                         notificationList.clear();
                         notificationList.addAll(newNotifications);
                         adapter.updateList(notificationList);
+                        Log.d("NotificationsFragment", "Updated adapter with " + newNotifications.size() + " notifications");
                         Toast.makeText(requireContext(), "Notificaciones cargadas: " + res.getCount(), Toast.LENGTH_SHORT).show();
                     } else {
+                        Log.e("NotificationsFragment", "API error: " + res.getMessage());
                         Toast.makeText(requireContext(), res.getMessage(), Toast.LENGTH_SHORT).show();
                         adapter.updateList(new ArrayList<>());
                     }
                 } else {
-                    Toast.makeText(requireContext(), "Error al cargar notificaciones", Toast.LENGTH_SHORT).show();
+                    String errorBody = null;
+                    try {
+                        if (response.errorBody() != null) {
+                            errorBody = response.errorBody().string();
+                        }
+                    } catch (Exception e) {
+                        Log.e("NotificationsFragment", "Error reading errorBody: " + e.getMessage());
+                    }
+                    Log.e("NotificationsFragment", "Response failed: " + response.code() + " " + response.message() + ", errorBody: " + errorBody);
+                    Toast.makeText(requireContext(), "Error al cargar notificaciones: " + response.message() + (errorBody != null ? " - " + errorBody : ""), Toast.LENGTH_LONG).show();
                     adapter.updateList(new ArrayList<>());
                 }
             }
@@ -270,6 +253,7 @@ public class NotificationsFragment extends Fragment {
                 String selectedDate = dropdownDates.getText().toString();
                 String studentId = selectedKid.equals("Todos") ? "All" : getStudentIdFromName(selectedKid);
                 int dayFilter = dateFilterMap.getOrDefault(selectedDate, 4);
+                Log.d("NotificationsFragment", "Polling for studentId: " + studentId + ", dayFilter: " + dayFilter);
                 fetchNotifications(studentId, dayFilter);
                 handler.postDelayed(this, POLLING_INTERVAL);
             }
@@ -310,23 +294,19 @@ public class NotificationsFragment extends Fragment {
     private void showNotification(Notifications notification) {
         NotificationManager notificationManager = (NotificationManager) requireContext().getSystemService(Context.NOTIFICATION_SERVICE);
 
-        // Crear Intent para abrir MainActivity con NotificationsFragment
         Intent intent = new Intent(requireContext(), MainActivity.class);
         intent.putExtra("fragment", "NotificationsFragment");
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(requireContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
-        // Construir la notificación
         NotificationCompat.Builder builder = new NotificationCompat.Builder(requireContext(), CHANNEL_ID)
-                .setSmallIcon(R.drawable.notifications) // Asegúrate de tener este recurso
+                .setSmallIcon(R.drawable.notifications)
                 .setContentTitle("SafeKids")
-                .setContentText(notification.getDescription())
+                .setContentText(notification.getDescription() != null ? notification.getDescription() : "Sin descripción")
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(pendingIntent)
-                .setAutoCancel(true); // Se elimina al hacer clic
+                .setAutoCancel(true);
 
-        // Mostrar la notificación con un ID único
         notificationManager.notify(NOTIFICATION_ID_BASE + notification.getId(), builder.build());
     }
-
 }
